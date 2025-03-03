@@ -1,5 +1,7 @@
 from pydantic import BaseModel, HttpUrl, Field, model_validator
 from typing import List, Dict, Any, Optional
+from enum import Enum
+import uuid
 
 
 class TranscriptRequest(BaseModel):
@@ -19,6 +21,7 @@ class InsightsRequest(BaseModel):
 class InsightsResponse(BaseModel):
     insights: str
 
+
 class CombinedRequest(BaseModel):
     video_id: Optional[str] = Field(None, description="YouTube video ID")
     url: Optional[str] = Field(None, description="YouTube video URL")
@@ -33,15 +36,22 @@ class CombinedRequest(BaseModel):
 
 
 class CombinedResponse(BaseModel):
-    video_id: str
-    transcript: str
-    insights: str
+    video_id: str = Field(..., description="YouTube video ID")
+    transcript: str = Field(..., description="Video transcript")
+    insights: Optional[str] = Field(None, description="AI-generated insights about the video")
+    processing_time: Optional[float] = Field(None, description="Processing time in seconds")
 
-class CombinedResponse(BaseModel):
-    video_id: str
-    transcript: str
-    insights: str
+
+class ProcessingStatusResponse(BaseModel):
+    status: str = Field(..., description="Status of the request: pending, processing, completed, failed")
+    progress: float = Field(..., description="Progress from 0.0 to 1.0")
+    message: str = Field(..., description="Status message")
+    request_id: Optional[str] = Field(None, description="Request ID")
+    estimated_completion_time: Optional[str] = Field(None, description="Estimated completion time in ISO format")
+    error: Optional[str] = Field(None, description="Error message if status is failed")
+    transcript: Optional[str] = Field(None, description="Transcript if available")
+    insights: Optional[str] = Field(None, description="Insights if available")
 
 class ErrorResponse(BaseModel):
     detail: str
-
+    error_code: Optional[str] = None

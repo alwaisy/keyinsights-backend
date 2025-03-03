@@ -67,5 +67,65 @@ OR
 }
 ```
 
+Response:
+```json
+{
+  "status": "pending",
+  "progress": 0,
+  "message": "Your request is being processed. Check status endpoint for updates.",
+  "request_id": "550e8400-e29b-41d4-a716-446655440000",
+  "estimated_completion_time": "2023-04-01T12:30:45.123456"
+}
+```
+
+### Check Processing Status
+
+`GET /api/status/{request_id}`
+
+Response:
+```json
+{
+  "status": "processing",
+  "progress": 0.5,
+  "message": "Generating insights...",
+  "request_id": "550e8400-e29b-41d4-a716-446655440000",
+  "estimated_completion_time": "2023-04-01T12:30:45.123456"
+}
+```
+
+### Get Processing Result
+
+`GET /api/combined/result/{request_id}`
+
+Response:
+```json
+{
+  "video_id": "dQw4w9WgXcQ",
+  "transcript": "Never gonna give you up, never gonna let you down...",
+  "insights": "This song is about unwavering loyalty and commitment...",
+  "processing_time": 12.34
+}
+```
+
+### Rate Limiting
+
+The API implements rate limiting of 10 requests per hour per IP address. When rate limit is exceeded, you'll receive a 429 response:
+
+```json 
+{
+  "detail": "Rate limit exceeded. Try again later.",
+  "error_code": "rate_limit_exceeded",
+  "requests_remaining": 0,
+  "reset_at": "2023-04-01T13:00:00.000000"
+}
+```
+
+Rate limit information is also available in response headers:
+
+- `X-RateLimit-Limit`: Maximum requests per hour
+- `X-RateLimit-Remaining`: Remaining requests in the current window
+- `X-RateLimit-Reset`: Unix timestamp when the rate limit resets
+
+
 ## Documentation
 API documentation is available at /docs when the server is running.

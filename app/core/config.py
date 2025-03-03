@@ -14,6 +14,16 @@ class Settings(BaseSettings):
     OPENROUTER_SITE_URL: Optional[str] = None
     OPENROUTER_SITE_NAME: Optional[str] = "YouTube Insights"
 
+    # Upstash Redis Configuration
+    UPSTASH_REDIS_URL: str
+    UPSTASH_REDIS_TOKEN: str
+
+    # Rate Limiting
+    RATE_LIMIT_REQUESTS: int = 10  # Requests per hour per IP
+
+    # Request Timeout (seconds)
+    REQUEST_TIMEOUT: int = 300  # 5 minutes
+
     class Config:
         env_file = ".env"
         case_sensitive = True

@@ -5,6 +5,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from app.core.config import settings
 from app.api.routes import api_router
 from app.middleware.logging import logging_middleware
+from app.middleware.rate_limit import rate_limit_middleware
 
 app = FastAPI(
     title=settings.API_TITLE,
@@ -21,6 +22,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Rate limiting middleware
+app.add_middleware(BaseHTTPMiddleware, dispatch=rate_limit_middleware)
+
 
 # Add logging middleware
 app.add_middleware(BaseHTTPMiddleware, dispatch=logging_middleware)
