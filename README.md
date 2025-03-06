@@ -11,16 +11,21 @@ A FastAPI application for extracting and analyzing YouTube video transcripts.
 
 1. Clone the repository
 2. Create a virtual environment:
+
 ```
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
+
 3. Install dependencies:
+
 ```
 pip install -r requirements.txt
 ```
+
 4. Create a `.env` file based on `.env.example` and add your OpenRouter API key
 5. Run the application:
+
 ```
  uvicorn app.main:app --reload
 ```
@@ -28,46 +33,56 @@ pip install -r requirements.txt
 ## API Endpoints
 
 ### Generate Transcript
+
 ```
-POST /api/transcript/
+POST /api/v1transcript/
 ```
+
 Request body:
+
 ```json
 {
   "video_id": "dQw4w9WgXcQ"
 }
 ```
+
 ### Generate Insights
 
 ```
-POST /api/insights/
+POST /api/v1/insights/
 ```
 
 Request body:
+
 ```json
 {
   "text": "Your text here...",
-  "model": "openai/gpt-4o"
+  "model": "deepseek/deepseek-chat:free"
 }
 ```
 
 ### Combined Transcript and Insights
+
 Request body:
+
 ```json
 {
   "video_id": "dQw4w9WgXcQ",
-  "model": "openai/gpt-4o"
+  "model": "deepseek/deepseek-chat:free"
 }
 ```
-OR 
+
+OR
+
 ```json
 {
   "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-  "model": "openai/gpt-4o"
+  "model": "deepseek/deepseek-chat:free"
 }
 ```
 
 Response:
+
 ```json
 {
   "status": "pending",
@@ -80,9 +95,10 @@ Response:
 
 ### Check Processing Status
 
-`GET /api/status/{request_id}`
+`GET /api/v1status/{request_id}`
 
 Response:
+
 ```json
 {
   "status": "processing",
@@ -95,9 +111,10 @@ Response:
 
 ### Get Processing Result
 
-`GET /api/combined/result/{request_id}`
+`GET /api/v1combined/result/{request_id}`
 
 Response:
+
 ```json
 {
   "video_id": "dQw4w9WgXcQ",
@@ -109,7 +126,8 @@ Response:
 
 ### Rate Limiting
 
-The API implements rate limiting of 10 requests per hour per IP address. When rate limit is exceeded, you'll receive a 429 response:
+The API implements rate limiting of 10 requests per hour per IP address. When rate limit is exceeded, you'll receive a
+429 response:
 
 ```json 
 {
@@ -126,6 +144,6 @@ Rate limit information is also available in response headers:
 - `X-RateLimit-Remaining`: Remaining requests in the current window
 - `X-RateLimit-Reset`: Unix timestamp when the rate limit resets
 
-
 ## Documentation
+
 API documentation is available at /docs when the server is running.

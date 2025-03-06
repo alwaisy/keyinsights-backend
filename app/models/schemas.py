@@ -15,7 +15,7 @@ class TranscriptResponse(BaseModel):
 
 class InsightsRequest(BaseModel):
     text: str = Field(..., description="Text to extract insights from")
-    model: Optional[str] = Field("openai/gpt-4o", description="AI model to use")
+    model: Optional[str] = Field("deepseek/deepseek-chat:free", description="AI model to use")
 
 
 class InsightsResponse(BaseModel):
@@ -25,7 +25,7 @@ class InsightsResponse(BaseModel):
 class CombinedRequest(BaseModel):
     video_id: Optional[str] = Field(None, description="YouTube video ID")
     url: Optional[str] = Field(None, description="YouTube video URL")
-    model: Optional[str] = Field("openai/gpt-4o", description="AI model to use")
+    model: Optional[str] = Field("deepseek/deepseek-chat:free", description="AI model to use")
 
     @model_validator(mode='after')
     def check_video_source(self):

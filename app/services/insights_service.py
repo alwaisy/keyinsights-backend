@@ -1,6 +1,6 @@
 import json
+
 import requests
-from typing import Dict, Any, Optional
 
 from app.core.config import settings
 from app.core.exceptions import AIModelError
@@ -8,7 +8,7 @@ from app.core.exceptions import AIModelError
 
 class InsightsService:
     @staticmethod
-    async def get_insights(text: str, model: str = "openai/gpt-4o") -> str:
+    async def get_insights(text: str, model: str = "deepseek/deepseek-chat:free") -> str:
         """
         Extracts key insights from text using an AI model.
 
@@ -61,13 +61,19 @@ class InsightsService:
             insights = response_data.get("choices", [{}])[0].get("message", {}).get("content", "")
 
             if not insights:
-                raise AIModelError("No insights were generated")
+                raise AIModelError("No insights were generated. The AI model couldn't extract meaningful information.")
 
             return insights
 
         except requests.RequestException as e:
-            raise AIModelError(f"Request error: {str(e)}")
+            raise AIModelError(f"API connection error: {str(e)}")
+
         except json.JSONDecodeError:
             raise AIModelError("Failed to parse API response")
+
+        except AIModelError as e:
+            # Re-raise AI model specific errors
+            raise e
+
         except Exception as e:
             raise AIModelError(f"Unexpected error: {str(e)}")

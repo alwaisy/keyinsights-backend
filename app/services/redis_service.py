@@ -1,9 +1,10 @@
-from upstash_redis import Redis
+import asyncio
+import base64
 import json
 import zlib
-import base64
-from typing import Any, Optional, Dict, Union
-import time
+from typing import Any, Optional, Dict
+
+from upstash_redis import Redis
 
 from app.core.config import settings
 
@@ -75,6 +76,19 @@ class RedisService:
         return status if isinstance(status, dict) else json.loads(status)
 
     async def set_status(self, request_id: str, status: Dict[str, Any], ttl: int = 7200) -> bool:
-        """Set processing status for a request with configurable TTL"""
+        """Set processing status and broadcast to WebSocket clients"""
         status_key = f"status:{request_id}"
-        return await self.set(status_key, status, ttl)
+        result = await self.set(status_key, status, ttl)
+
+        # Broadcast to WebSockets
+        try:
+            # Import here to avoid circular imports
+            from app.api.routes.websocket import manager
+            # Use asyncio.create_task to avoid blocking
+            asyncio.create_task(manager.send_update(request_id, status))
+        except Exception as e:
+            print(f"Error broadcasting status update: {str(e)}")
+            # Don't let broadcasting errors affect the main function
+            pass
+
+        return result
