@@ -13,7 +13,7 @@ A FastAPI application for extracting and analyzing YouTube video transcripts.
 2. Create a virtual environment:
 
 ```
-python -m venv venv
+python -m venv .venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 

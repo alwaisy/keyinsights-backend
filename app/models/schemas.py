@@ -1,7 +1,6 @@
-from pydantic import BaseModel, HttpUrl, Field, model_validator
-from typing import List, Dict, Any, Optional
-from enum import Enum
-import uuid
+from typing import Optional
+
+from pydantic import BaseModel, Field, model_validator
 
 
 class TranscriptRequest(BaseModel):
@@ -51,6 +50,7 @@ class ProcessingStatusResponse(BaseModel):
     error: Optional[str] = Field(None, description="Error message if status is failed")
     transcript: Optional[str] = Field(None, description="Transcript if available")
     insights: Optional[str] = Field(None, description="Insights if available")
+
 
 class ErrorResponse(BaseModel):
     detail: str
