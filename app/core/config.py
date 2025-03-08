@@ -1,5 +1,6 @@
-from pydantic_settings import BaseSettings
 from typing import Optional
+
+from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
@@ -7,6 +8,7 @@ class Settings(BaseSettings):
     API_TITLE: str = "YouTube Insights API"
     API_DESCRIPTION: str = "API for extracting insights from YouTube videos"
     API_VERSION: str = "0.1.0"
+    PORT: int
     DEBUG: bool = False
 
     # OpenRouter Configuration

@@ -1,9 +1,9 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
 
-from app.core.config import settings
 from app.api.routes import api_router
+from app.core.config import settings
 from app.middleware.logging import logging_middleware
 from app.middleware.rate_limit import rate_limit_middleware
 
@@ -26,7 +26,6 @@ app.add_middleware(
 # Rate limiting middleware
 app.add_middleware(BaseHTTPMiddleware, dispatch=rate_limit_middleware)
 
-
 # Add logging middleware
 app.add_middleware(BaseHTTPMiddleware, dispatch=logging_middleware)
 
@@ -42,4 +41,5 @@ async def health_check():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("app.main:app", host="0.0.0.0", port=8000, reload=settings.DEBUG)
+
+    uvicorn.run("app.main:app", host="0.0.0.0", port=settings.PORT, reload=settings.DEBUG)
