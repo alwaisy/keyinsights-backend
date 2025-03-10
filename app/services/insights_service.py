@@ -23,6 +23,7 @@ class InsightsService:
             AIModelError: If insights cannot be generated
         """
         try:
+            print(settings.OPENROUTER_API_KEY, "api key")
             headers = {
                 "Authorization": f"Bearer {settings.OPENROUTER_API_KEY}",
                 "Content-Type": "application/json",

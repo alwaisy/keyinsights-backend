@@ -51,6 +51,7 @@ class RedisService:
 
     async def increment(self, key: str, amount: int = 1, ttl: Optional[int] = None) -> int:
         """Increment a counter in Redis"""
+        print("entered redis increment")
         try:
             # Using synchronous Redis client
             if amount == 1:
@@ -58,8 +59,8 @@ class RedisService:
             else:
                 current = self.redis.incrby(key, amount)
 
-            # Set expiration if TTL is provided and this is the first increment
-            if ttl and current == amount:
+            # ALWAYS set expiration if TTL is provided (not just on first increment)
+            if ttl is not None:
                 self.redis.expire(key, ttl)
 
             return current

@@ -239,7 +239,6 @@ async def generate_transcript_and_insights(
     redis = RedisService()
 
     # Set initial status
-    start_time = time.time()
     await redis.set_status(
         request_id,
         {
